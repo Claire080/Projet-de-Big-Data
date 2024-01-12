@@ -42,4 +42,5 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - sentiment_analyzer
+      sentiment_analyzer:
+        condition: service_healthy
