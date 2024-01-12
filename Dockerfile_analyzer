@@ -1,0 +1,13 @@
+FROM python:3.8-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+COPY out20.csv .
+COPY analyzer.py .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+VOLUME [ "/app" ]
+
+CMD ["python", "analyzer.py"]z

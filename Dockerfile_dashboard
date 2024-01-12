@@ -1,0 +1,10 @@
+FROM python:3.8-slim
+
+WORKDIR /app
+
+RUN pip install --no-cache-dir pandas matplotlib
+
+COPY dashboard.py .
+COPY out20_with_sentiments.csv .
+
+CMD ["python", "/app/dashboard.py"]

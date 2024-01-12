@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: pg_container
+    build:
+      context: .
+      dockerfile: Dockerfile_db
+    restart: always
+    ports:
+      - "5454:5432"
+    volumes:
+      - ./datas:/docker-entrypoint-initdb.d
+
+  pgadmin:
+    container_name: pg_admin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - postgres
+    ports:
+      - "5050:80"
+
+  sentiment_analyzer:
+    container_name: sentiment_analyze
+    build:
+      context: .
+      dockerfile: Dockerfile_analyzer
+    depends_on:
+      - pgadmin
+    volumes:
+      - .:/app
+
+  dashboard:
+    container_name: dashboard
+    build:
+      context: .
+      dockerfile: Dockerfile_dashboard
+    volumes:
+      - .:/app
+    depends_on:
+      - sentiment_analyzer
